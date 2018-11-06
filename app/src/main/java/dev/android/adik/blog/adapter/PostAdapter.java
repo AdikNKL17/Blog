@@ -2,7 +2,6 @@ package dev.android.adik.blog.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +17,7 @@ import java.util.List;
 
 import dev.android.adik.blog.DetailActivity;
 import dev.android.adik.blog.R;
-import dev.android.adik.blog.model.Post;
+import dev.android.adik.blog.model.list.Post;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
@@ -36,16 +35,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.PostHolder holder, int position) {
-        Post post = postList.get(position);
+        final Post post = postList.get(position);
         Picasso.get()
                 .load(postList.get(position).getGambar())
                 .into(holder.postThumbnail);
         holder.postTitle.setText(postList.get(position).getJudul());
+        holder.postDate.setText(postList.get(position).getTanggal());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("ID_POST", post.getId());
                 context.startActivity(intent);
             }
         });
@@ -60,11 +61,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         CardView cardView;
         ImageView postThumbnail;
         TextView postTitle;
+        TextView postDate;
         public PostHolder(View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.post);
             postThumbnail = itemView.findViewById(R.id.card_thumbnail);
             postTitle = itemView.findViewById(R.id.card_title);
+            postDate = itemView.findViewById(R.id.card_date);
         }
     }
 

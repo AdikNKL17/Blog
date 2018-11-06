@@ -4,21 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailActivity">
+    tools:context=".DetailActivity"
+    android:background="@color/colorPrimaryDark">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_close_black_24dp"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"/>
 
-    <ImageView
-        android:id="@+id/post_image"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/detai_container"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:src="@drawable/thumbnail"
-        android:scaleType="centerCrop"/>
+        android:background="@color/colorPrimaryDark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/post_image"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@id/toolbar"
+                android:src="@drawable/thumbnail"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/date_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="20-11-2018"
+                android:layout_below="@id/post_image"
+                android:layout_margin="16dp"/>
+
+            <TextView
+                android:id="@+id/title_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/card_title"
+                android:layout_below="@id/date_detail"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:maxLines="2"/>
+
+            <TextView
+                android:id="@+id/text_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/card_text"
+                android:layout_below="@id/title_detail"
+                android:layout_margin="16dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:lineSpacingMultiplier="1.2"/>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>

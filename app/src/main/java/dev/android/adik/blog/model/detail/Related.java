@@ -1,9 +1,9 @@
-package dev.android.adik.blog.model;
+package dev.android.adik.blog.model.detail;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Post {
+public class Related {
     @SerializedName("id")
     @Expose
     private Integer id;

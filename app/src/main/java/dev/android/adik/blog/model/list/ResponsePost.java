@@ -1,4 +1,4 @@
-package dev.android.adik.blog.model;
+package dev.android.adik.blog.model.list;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
