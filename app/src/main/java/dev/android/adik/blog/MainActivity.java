@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.android.adik.blog.adapter.PostAdapter;
+import dev.android.adik.blog.listener.InfinityScrollListener;
 import dev.android.adik.blog.model.list.Post;
 import dev.android.adik.blog.model.list.ResponsePost;
 import dev.android.adik.blog.network.ApiServices;
@@ -31,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     List<Post> postList;
     PostAdapter postAdapter;
     AdView mAdView;
+
+    boolean isLoading = false;
+
+    int pageIndex = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +55,46 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(postAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        MobileAds.initialize(this, "ca-app-pub-3738675243322071~9841768298");
+
+
+        /*MobileAds.initialize(this, "ca-app-pub-3738675243322071~9841768298");
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);*/
 
-        dataPost();
+        loadFirstPage();
+
+        recyclerView.addOnScrollListener(new InfinityScrollListener((LinearLayoutManager) layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+
+                pageIndex += 1;
+                loadNextPage();
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return 5;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return false;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
     }
 
-    private void dataPost() {
+    private void loadFirstPage() {
+
         ApiServices apiServices = InitRetrofit.getInstance();
 
-        retrofit2.Call<ResponsePost> postCall = apiServices.getAllPost();
+        retrofit2.Call<ResponsePost> postCall = apiServices.getAllPost(pageIndex);
 
         postCall.enqueue(new Callback<ResponsePost>() {
             @Override
@@ -69,6 +102,36 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     Log.d("response", response.body().toString());
 
+                    List<Post> dataPost = response.body().getBlog();
+                    boolean status = response.body().getStatus();
+
+                    if (status){
+                        PostAdapter postAdapter = new PostAdapter(MainActivity.this, dataPost);
+                        recyclerView.setAdapter(postAdapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ResponsePost> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void loadNextPage() {
+
+        ApiServices apiServices = InitRetrofit.getInstance();
+
+        retrofit2.Call<ResponsePost> postCall = apiServices.getAllPost(pageIndex);
+
+        postCall.enqueue(new Callback<ResponsePost>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponsePost> call, Response<ResponsePost> response) {
+                if (response.isSuccessful()){
+                    Log.d("response", response.body().toString());
+
+                    isLoading = false;
                     List<Post> dataPost = response.body().getBlog();
                     boolean status = response.body().getStatus();
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.jaredrummler.android.util.HtmlBuilder;
 import com.squareup.picasso.Picasso;
 
 import dev.android.adik.blog.model.detail.Post;
@@ -92,7 +93,9 @@ public class DetailActivity extends AppCompatActivity {
                                 .into(postImage);
                         postDate.setText(dataPost.getTanggal());
                         postTitle.setText(dataPost.getTitle());
-                        postText.setText(dataPost.getContent());
+                        HtmlBuilder html = new HtmlBuilder();
+                        html.p(dataPost.getContent());
+                        postText.setText(html.build());
                     }
                 }
             }
